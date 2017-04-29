@@ -25,10 +25,10 @@ To test IPV6 you can setup a network using [Mac Internet Sharing](https://develo
 - [IPV4 PR 6142](results/IPV4_PR6142.md)
 - [IPV4 PR 6160](results/IPV4_6160.md)
 
+HTTPS on IPV6 doesn't works, EOF
+
+Both PR6142 and PR6160 fixes IPV6 connectivity.
+
+Both PR6142 and PR6160 gives the same results except that I get *timeout* with PR6160 which I don't get with PR6142.
+
 On IPV4 all seems fine, except for some reason, OpenFL's URLLoader doesn't like my Server's SSL (Error: 35), I'm using 'Let's Encrypt' maybe that's why???
-
-On IPV6, crash EOF (without any PR).
-
-On IPV6 with PR6142, HTTP seems fine except for URLLoader (Error: 6). HTTPS crash EOF.
-
-On IPV6 with PR6160, same results as PR6142
