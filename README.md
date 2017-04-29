@@ -18,12 +18,12 @@ To test IPV6 you can setup a network using [Mac Internet Sharing](https://develo
 
 ***My results are as follow:***
 
-[IPV6 No PR](results/IPV6_NOPR.md)
-[IPV6 PR 6142](results/IPV6_PR6142.md)
-[IPV6 PR 6160](results/IPV6_PR6160.md)
-[IPV4 No PR](results/IPV4_NOPR.md)
-[IPV4 PR 6142](results/IPV4_PR6142.md)
-[IPV4 PR 6160](results/IPV4_6160.md)
+- [IPV6 No PR](results/IPV6_NOPR.md)
+- [IPV6 PR 6142](results/IPV6_PR6142.md)
+- [IPV6 PR 6160](results/IPV6_PR6160.md)
+- [IPV4 No PR](results/IPV4_NOPR.md)
+- [IPV4 PR 6142](results/IPV4_PR6142.md)
+- [IPV4 PR 6160](results/IPV4_6160.md)
 
 On IPV4 all seems fine, except for some reason, OpenFL's URLLoader doesn't like my Server's SSL (Error: 35), I'm using 'Let's Encrypt' maybe that's why???
 
