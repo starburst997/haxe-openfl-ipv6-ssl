@@ -45,9 +45,6 @@ class Main extends Sprite
     text.height = 1000;
 		addChild( text );
     
-    addText('This is a test for IPV6 / SSL using various methods');
-    addText('');
-    
     nextUrl();
 	}
   
@@ -101,6 +98,10 @@ class Main extends Sprite
         {
           urlLoaderTest( url, function()
           {
+            // Copy to clipboard
+            openfl.system.System.setClipboard(text.text);
+            
+            // Add notice
             addText('\nTesting DONE (CLICK FOR NEXT!): ${url}\n');
             
             // Dummy click...
