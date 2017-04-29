@@ -1,6 +1,7 @@
 package;
 
 import haxe.Http;
+import haxe.Timer;
 
 import sys.ssl.Certificate;
 import sys.ssl.Socket;
@@ -13,8 +14,11 @@ import openfl.net.URLLoader;
 import openfl.net.URLRequest;
 import openfl.net.URLLoaderDataFormat;
 import openfl.events.*;
+import openfl.Lib;
 
 import lime.utils.Assets;
+
+using StringTools;
 
 /**
  * Testing IPV6 / SSL
@@ -97,7 +101,17 @@ class Main extends Sprite
         {
           urlLoaderTest( url, function()
           {
-            addText('\nTesting DONE: ${url}\n');
+            addText('\nTesting DONE (CLICK FOR NEXT!): ${url}\n');
+            
+            // Dummy click...
+            var click:MouseEvent->Void;
+            click = function( e )
+            {
+              Lib.current.stage.removeEventListener( MouseEvent.CLICK, click );
+              text.text = ''; // Clear
+              nextUrl();
+            };
+            Lib.current.stage.addEventListener( MouseEvent.CLICK, click, false, 0, true );
           } );
         } );
       } );
@@ -109,8 +123,16 @@ class Main extends Sprite
   {
     addText('\nTesting Http: ${url}\n');
     
-    var content = Http.requestUrl( url );
-    addText('Http.requestUrl: ${content}');
+    try
+    {
+      var content = Http.requestUrl( url );
+      content = content.substr(0, 30).replace('\n', '');
+      addText('Http.requestUrl: ${content}');
+    }
+    catch ( e:Dynamic )
+    {
+      addText('Http Crash: ${e}');
+    }
     
     handler();
   }
@@ -120,26 +142,35 @@ class Main extends Sprite
   {
     addText('\nTesting Async Http: ${url}\n');
     
-    var http = new Http( url );
-    
-    http.onStatus = function( status )
+    try
     {
-      addText('Http.request STATUS: ${status}');
-    };
-    
-    http.onData = function( data )
+      var http = new Http( url );
+      
+      http.onStatus = function( status )
+      {
+        addText('Http.request STATUS: ${status}');
+      };
+      
+      http.onData = function( data )
+      {
+        data = data.substr(0, 30).replace('\n', '');
+        addText('Http.request: ${data}');
+        handler();
+      };
+      
+      http.onError = function( error )
+      {
+        addText('Http.request ERROR: ${error}');
+        handler();
+      };
+      
+      http.request();
+    }
+    catch ( e:Dynamic )
     {
-      addText('Http.request: ${data}');
+      addText('Http Async Crash: ${e}');
       handler();
-    };
-    
-    http.onError = function( error )
-    {
-      addText('Http.request ERROR: ${error}');
-      handler();
-    };
-    
-    http.request();
+    }
   }
   
   // Akifox uses sys.net.Socket, seems like the simplest way to test?
@@ -154,7 +185,9 @@ class Main extends Sprite
       {
         if ( response.isOK ) 
         {
-          addText('Akifox: ${response.status}, ${response.content}');
+          var str:String = response.content.toString();
+          var content = str.substr(0, 30).replace('\n', '');
+          addText('Akifox: ${response.status}, ${content}');
         } 
         else 
         {
@@ -169,16 +202,19 @@ class Main extends Sprite
   }
   
   // OpenFL URLLoader
+  var loader:URLLoader;
   function urlLoaderTest( url, handler:Void->Void )
   {
     addText('\nTesting URLLoader: ${url}\n');
     
-    var loader = new URLLoader();
+    loader = new URLLoader();
     loader.dataFormat = URLLoaderDataFormat.TEXT;
 
     loader.addEventListener(Event.COMPLETE, function( e )
     {
-      addText('URLLoader STATUS: ${loader.data}');
+      var str:String = loader.data.toString();
+      var content = str.substr(0, 30).replace('\n', '');
+      addText('URLLoader: ${content}');
       handler();
     }, false, 0, true);
     loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, function( e )
